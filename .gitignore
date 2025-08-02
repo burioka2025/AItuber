@@ -8,6 +8,6 @@ venv/
 
 # Environment variables
 .env
-
+response.txt
 # macOS
 .DS_Store 

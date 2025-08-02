@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 # .envファイルから環境変数を読み込む
 load_dotenv()
 
-# ▼▼▼ ここを修正 ▼▼▼
 
 client = OpenAI(
   # 1. ベースURLをOpenRouterに向ける
@@ -16,7 +15,6 @@ client = OpenAI(
   # APIキーは.envファイルから読み込む
   api_key=os.getenv("OPENROUTER_API_KEY")
 )
-
 # ▲▲▲ ここまで修正 ▲▲▲
 
 # (キャラクター設定の character_prompt は変更なし)
