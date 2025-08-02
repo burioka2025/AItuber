@@ -1,0 +1,7 @@
+openai
+chat-downloader
+python-dotenv
+requests
+sounddevice
+soundfile
+numpy

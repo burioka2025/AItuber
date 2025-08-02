@@ -1,0 +1,105 @@
+# 自動応答AI VTuber プロジェクト
+
+このプロジェクトは、Live2Dモデルと大規模言語モデル（LLM）を連携させ、YouTube Liveのコメントに自動で応答するVTuberシステムを構築するためのものです。
+
+## 📝 キャラクター設定
+
+このVTuberは、以下の設定に基づいた応答を自動生成します。
+
+-   **性格**: いろんなことを知っている物知りだけど、ちょっと天然。
+-   **口調**: 「〜だよ」「〜なのだ」といった、優しく少し幼い口調。
+-   **年齢**: 見た目は12歳くらいだが、公表は年齢不詳。
+-   **一人称**: わたし
+-   **その他**: 視聴者を「キミ」「あなた」と呼ぶ。
+
+※キャラクターの個性は `chatbot.py` 内の `character_prompt` を編集することで、より詳細にカスタマイズできます。
+
+## ⚙️ システム構成
+
+```
+[YouTubeコメント] -> [main.py] -> [chatbot.py (OpenRouter)] -> [Aivis speech] -> [音声出力]
+                                                                                  |
+                                                                                  v
+                                          [仮想オーディオ (BlackHole)] -> [VTube Studio (リップシンク)]
+                                                                                  |
+                                          [OBS (画面合成)] <-----------------------+--- [回答テキスト表示]
+                                                  |
+                                                  v
+                                             [配信]
+```
+
+## 🛠️ 使用技術・ツール
+
+-   **実行環境**: macOS
+-   **言語**: Python 3.x
+-   **主要ライブラリ**: `openai`, `chat-downloader`, `python-dotenv`
+-   **VTuber**:
+    -   Live2Dモデル
+    -   VTube Studio
+-   **AI (LLM)**: OpenRouter (e.g., GPT-3.5-Turbo)
+-   **音声合成**: Aivis speech
+-   **配信**: OBS Studio
+-   **その他**: BlackHole (仮想オーディオデバイス)
+
+## 🚀 セットアップ手順
+
+1.  **前提ツールのインストール**:
+    -   [VTube Studio](https://store.steampowered.com/app/1325860/VTube_Studio/?l=japanese)
+    -   [OBS Studio](https://obsproject.com/ja)
+    -   [Aivis speech](https://aivis-project.com/)
+    -   [Vb-cable]
+
+2.  **リポジトリの準備**:
+    ```bash
+    git clone [このリポジトリのURL]
+    cd [リポジトリ名]
+    ```
+
+3.  **Python環境の構築**:
+    ```bash
+    # 仮想環境の作成
+    python3 -m venv venv
+    # 仮想環境のアクティベート
+    source venv/bin/activate
+    # 依存ライブラリのインストール
+    pip install -r requirements.txt
+    ```
+
+4.  **APIキーの設定**:
+    -   `.env.example` をコピーして `.env` という名前のファイルを作成します。
+    -   `.env` ファイルを開き、取得したOpenRouterのAPIキーを記述します。
+        ```dotenv
+        OPENROUTER_API_KEY="sk-or-v1-..."
+        ```
+
+5.  **パスの設定**:
+    -   `main.py` を開き、`AIVIS_SPEECH_PATH` の値を、ご自身の環境の `Aivis-speech` 実行ファイルの絶対パスに修正してください。
+
+6.  **VTube StudioとOBSの設定**:
+    -   音声連携のため、Macのサウンド出力を`BlackHole`に、VTube Studioのマイク入力を`BlackHole`に設定します。
+    -   OBSでVTube Studioの画面（背景透過）と、`response.txt`を読み込むテキストソースを配置します。
+
+## ▶️ 実行方法
+
+1.  VTube Studioを起動し、モデルを表示させます。
+2.  OBS Studioを起動し、配信画面の準備をします。
+3.  ターミナルで以下のコマンドを実行します。
+    ```bash
+    # 仮想環境がアクティブになっていることを確認
+    python main.py
+    ```
+4.  指定したYouTube Liveにコメントが投稿されると、VTuberが自動で応答を開始します。
+
+## 📂 ファイル構成
+
+```
+.
+├── .cursor-rules      # Cursor用設定ファイル
+├── .env               # APIキーなどの環境変数（Git管理外）
+├── .env.example       # .envのテンプレート
+├── chatbot.py         # LLM応答生成モジュール
+├── main.py            # メインプログラム
+├── README.md          # このファイル
+├── requirements.txt   # Python依存ライブラリ一覧
+└── response.txt       # OBSに表示する回答テキスト（自動生成）
+```
