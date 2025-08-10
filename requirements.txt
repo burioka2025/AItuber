@@ -5,3 +5,6 @@ requests
 sounddevice
 soundfile
 numpy
+openai-whisper
+torch
+torchaudio
